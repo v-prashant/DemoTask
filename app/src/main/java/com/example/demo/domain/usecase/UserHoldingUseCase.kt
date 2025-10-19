@@ -10,12 +10,11 @@ import javax.inject.Inject
 class UserHoldingUseCase @Inject constructor(
     private val repository: UserHoldingRepository
 ) {
-
     suspend operator fun invoke(): ResultState<UserHoldingResponse> {
         return try {
             val res = repository.getUserHolding()
             ResultState.Success(data = res)
-        } catch (ex: IOException) {
+        } catch (_: IOException) {
             ResultState.Error(msg = "No Internet")
         } catch (ex: Exception) {
             ResultState.Error(msg = ex.message.toString())

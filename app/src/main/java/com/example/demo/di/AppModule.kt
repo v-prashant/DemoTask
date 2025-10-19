@@ -1,12 +1,16 @@
 package com.example.demo.di
 
-import com.example.demo.data.ApiService
+import android.content.Context
+import android.content.SharedPreferences
+import com.example.demo.data.local.LocalService
+import com.example.demo.data.remote.ApiService
 import com.example.demo.data.repository.UserHoldingRepositoryImpl
 import com.example.demo.domain.repository.UserHoldingRepository
-import dagger.Binds
+import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -28,8 +32,20 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideUserHoldingRepo(apiService: ApiService): UserHoldingRepository {
-        return UserHoldingRepositoryImpl(apiService)
+    fun provideUserHoldingRepo(apiService: ApiService, localService: LocalService): UserHoldingRepository {
+        return UserHoldingRepositoryImpl(apiService, localService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
+        return context.getSharedPreferences("user_holding_prefs", Context.MODE_PRIVATE)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGson(): Gson {
+        return Gson()
     }
 
 }
