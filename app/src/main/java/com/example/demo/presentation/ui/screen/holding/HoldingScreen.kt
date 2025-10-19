@@ -50,7 +50,7 @@ fun HoldingScreen() {
                 sheetContent = {
                     BottomSheet(
                         currentValue = viewModel.getCurrentValue().toString(),
-                        totalInvestment = viewModel.getTotalInvesetment().toString(),
+                        totalInvestment = viewModel.getTotalInvestment().toString(),
                         totalProfitLoss = viewModel.getTotalProfitLoss(),
                         todayProfitLoss = viewModel.getTodayProfitLoss(),
                         totalPercentage = viewModel.getTotalProfitLossPercentage()

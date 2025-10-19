@@ -92,21 +92,19 @@ dependencies {
     // image loading
     implementation(libs.coil.compose)
 
-    //room
-    implementation(libs.room.runtime)
-    kapt(libs.room.compiler)
-    implementation(libs.room.ktx)
-    implementation(libs.room.paging)
-
-    // youtube Integration
-    implementation(libs.youtube.player.core)
-
     //compose navigation
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
 
     // for icons
     implementation(libs.compose.material.icons.extended)
+
+    // Coroutines test
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.turbine)
+
+    // for instantTaskExecutorRule
+    testImplementation(libs.androidx.core.testing)
 
 }
 

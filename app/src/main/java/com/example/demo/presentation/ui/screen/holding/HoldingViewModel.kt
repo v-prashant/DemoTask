@@ -10,7 +10,7 @@ import com.example.demo.domain.model.UserHoldingModel
 import com.example.demo.domain.usecase.UserHoldingUseCase
 import com.example.demo.presentation.ui.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -18,7 +18,8 @@ import kotlin.math.round
 
 @HiltViewModel
 class HoldingViewModel @Inject constructor(
-    private val userHoldingUseCase: UserHoldingUseCase
+    private val userHoldingUseCase: UserHoldingUseCase,
+    private val ioDispatcher: CoroutineDispatcher
 ): ViewModel() {
 
     private val _userHoldingState = mutableStateOf<UiState<List<UserHoldingModel>>>(UiState.Success(emptyList()))
@@ -31,7 +32,7 @@ class HoldingViewModel @Inject constructor(
     fun getHodling() {
         _userHoldingState.value = UiState.Loading
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
+            withContext(ioDispatcher) {
                 val res = userHoldingUseCase()
                 when(res) {
                     is ResultState.Success -> {
@@ -61,7 +62,7 @@ class HoldingViewModel @Inject constructor(
         return round(res*100)/100
     }
 
-    fun getTotalInvesetment(): Double {
+    fun getTotalInvestment(): Double {
         val data = (_userHoldingState.value as? UiState.Success)?.data
         val res = data?.sumOf { item->
             (item.avgPrice ?: 0.0) * (item.quantity ?: 0 )
@@ -70,7 +71,7 @@ class HoldingViewModel @Inject constructor(
     }
 
     fun getTotalProfitLoss(): Double {
-        val res = getCurrentValue() - getTotalInvesetment()
+        val res = getCurrentValue() - getTotalInvestment()
         return round(res*100)/100
     }
 
@@ -83,13 +84,13 @@ class HoldingViewModel @Inject constructor(
     }
 
     fun getTotalProfitLossPercentage(): Double {
-        val totalInvestment = getTotalInvesetment()
+        val totalInvestment = getTotalInvestment()
         val totalProfitLoss = getTotalProfitLoss()
 
         if (totalInvestment == 0.0) {
             return 0.0
         }
-        val percentage = (totalProfitLoss / totalInvestment) * 10
+        val percentage = (totalProfitLoss / totalInvestment) * 100
         return round(percentage * 100) / 100
     }
 
