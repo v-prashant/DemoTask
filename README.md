@@ -2,7 +2,6 @@
 ## Features
 
 *   Online and offline functionality
-*   Track stock
 
 ## TechStack
 
